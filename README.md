@@ -1,2 +1,2 @@
 # DoA_simulation
-The DAG augmentation of the Onion method
+The DAG adaptation of the Onion method
