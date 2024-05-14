@@ -373,7 +373,7 @@ randomize_graph <- function(g) {
 
 cov_to_corr <- function(S) {
   # Rescales covariance to correlation.
-  # S = covariacne matrix
+  # S = covariance matrix
   
   D <- diag(sqrt(diag(S)))
   ID = solve(D)
