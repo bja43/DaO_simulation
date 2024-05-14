@@ -44,7 +44,7 @@ def er_dag(p, d=0.5, ad=None, rng=default_rng()):
 
 def sf_out(g, rng=default_rng()):
     '''
-    Rewires entires within rows-row sum (in-degree) doesnt change.
+    Rewires entries within rows-row sum (in-degree) doesnt change.
 
     Parameters
     ----------
@@ -92,7 +92,7 @@ def sf_out(g, rng=default_rng()):
 
 def sf_in(g, rng=default_rng()):
     '''
-    Rewires entires within cols-col sum (out-degree) doesnt change.
+    Rewires entries within cols-col sum (out-degree) doesnt change.
 
     Parameters
     ----------
