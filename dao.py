@@ -514,15 +514,3 @@ def cov_to_dag(g, S):
             O[i] -= yX @ IXX @ yX
 
     return B, O
-
-
-# TODO #
-
-# CONFRIM BETA PARAMETERS
-# ARE CORRECT!!!
-
-# VERTIFY THAT P IS CORRECT
-# ARE THE 'c' COLUMNS BEING
-# STACKED CORRECTLY?
-
-# END #
