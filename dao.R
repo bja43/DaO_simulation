@@ -69,7 +69,7 @@ sf_in <- function(g) {
   for (i in (p - 1) : 2) {
     J <- NULL
     for (j in 1 : (i - 1)) {
-      J <- c(J, 1 + rep(j, sum(g[j, i : p]))) # CHECK THIS
+      J <- c(J, 1 + rep(j, sum(g[j, i : p])))
     }
     J <- sample(J)
     
@@ -167,7 +167,7 @@ invert_order <- function(ord) {
 
 mpii <- function(g, i) {
   # Helper function: samples a multivariate Pearson type II.
-  # g = (lower triangluar) directed acyclic graph
+  # g = (lower triangular) directed acyclic graph
   # i = index
   
   # p = |variables|
@@ -196,7 +196,7 @@ mpii <- function(g, i) {
 
 pmat <- function(g, i) {
   # Helper function: returns a permutation matrix.
-  # g = (lower triangluar) directed acyclic graph
+  # g = (lower triangular) directed acyclic graph
   # i = index
 
   # d = |output|
@@ -221,7 +221,7 @@ pmat <- function(g, i) {
 corr <- function(g) {
   # Randomly generates a correlation matrix where f(R) ~ 1
   # given a direct acyclic graph.
-  # g = (lower triangluar) directed acyclic graph
+  # g = (lower triangular) directed acyclic graph
   
   # reorder g
   ord <- sofic_order(g)
@@ -302,8 +302,8 @@ cov <- function(g, lb_b=0, ub_b=1, lb_o=1, ub_o=2) {
 
 simulate <- function(B, O, n, err=NULL) {
   # Randomly simulates data.
-  # B = (lower triangluar) beta matrix
-  # O = (diagonal entires) error matrix
+  # B = (lower triangular) beta matrix
+  # O = (diagonal entries) error matrix
   # n = sample size
   # err = additive error distribution
   
