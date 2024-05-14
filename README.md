@@ -4,9 +4,9 @@ The DAG adaptation of the Onion method
 ## Example using DaO in Python
 
 ```python
-p = 10
-ad = 4
-n = 100
+p = 10    # number of variables
+ad = 4    # average degree
+n = 100   # number of samples
 
 g = er_dag(p, ad=ad)
 sf_out(g)
@@ -22,12 +22,12 @@ df = pd.DataFrame(X, columns=[f"X{i + 1}" for i in range(p)])
 ## Example using DaO in R
 
 ```r
-p <- 10
-ad <- 4
-n <- 100
+p <- 10    # number of varibales
+ad <- 4    # average degree
+n <- 100   # number of samples
 
 g <- er_dag(p, ad=ad)
-g <- sf_rewire_out(g)
+g <- sf_out(g)
 g <- randomize_graph(g)
 
 model <- corr(g)
