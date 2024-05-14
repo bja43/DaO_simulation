@@ -201,10 +201,6 @@ pmat <- function(g, i) {
 
   # d = |output|
   d <- i - 1
-  
-  # VERTIFY THAT P IS CORRECT
-  # ARE THE 'c' COLUMNS BEING 
-  # STACKED CORRECTLY?
 
   P <- NULL
   for (j in 1 : d) {
@@ -409,20 +405,3 @@ cov_to_dag <- function(g, S) {
   
   return(list(B=B, O=O))
 }
-
-
-# CONFRIM BETA PARAMETERS ARE CORRECT!!!
-
-
-# EXAMPLE:
-
-
-g <- er_dag(10, ad=4)
-g <- sf_rewire_out(g)
-g <- randomize_graph(g)
-
-model <- corr(g)
-# model <- cov(g, lb_o=1, ub_o=1, lb_b=0.5, ub_b=2)
-
-X <- simulate(model$B, model$O, 100)
-X <- standardize(X)
