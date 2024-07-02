@@ -124,12 +124,12 @@ def run_sim(n, p, ad, sf, rep):
               times[i + 1] - times[i]) for i, alg in enumerate(algs)])
 
 
-reps = 20
+reps = 10
 
 unique_sims = [(n, p, ad, sf)
-               for ad in [10]
-               for p in [60]
-               for n in [1_000]
+               for n in [200, 1_000]
+               for p in [20, 60]
+               for ad in [5, 10]
                for sf in [(1, 0)]]
 
 standardize_data = True
@@ -146,7 +146,6 @@ boss_bes = False
 boss_starts = 10
 boss_threads = 8
 
-grasp_starts = 1
 grasp_starts = 10
 grasp_depth = 3
 
