@@ -414,7 +414,7 @@ def simulate(B, O, n, err=None, rng=default_rng()):
         for j in J: X[:, i] += B[i, j] * X[:, j]
 
         # add error
-        X[:, i] += err(O[i], n)
+        X[:, i] += err(np.sqrt(O[i]), n)
 
     # reorder X
     ord = invert_order(ord)
