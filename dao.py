@@ -402,7 +402,8 @@ def simulate(B, O, n, err=None, rng=default_rng()):
     O = O[ord]
 
     # set default error as normal
-    if err is None: err = lambda *x: rng.normal(0, *x)
+    if err is None: err = lambda *x: rng.normal(0, np.sqrt(x[0]), x[1])
+
 
     # simulate data
     X = np.zeros([n, p])
@@ -414,7 +415,7 @@ def simulate(B, O, n, err=None, rng=default_rng()):
         for j in J: X[:, i] += B[i, j] * X[:, j]
 
         # add error
-        X[:, i] += err(np.sqrt(O[i]), n)
+        X[:, i] += err(O[i], n)
 
     # reorder X
     ord = invert_order(ord)
