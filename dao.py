@@ -176,7 +176,7 @@ def sofic_order(g):
     p = g.shape[0]
 
     # convert g to booleans
-    g = g.astype(np.bool)
+    g = g.astype(bool)
 
     ord = [i for i in range(p) if np.sum(g[i]) == 0]
 
@@ -403,7 +403,6 @@ def simulate(B, O, n, err=None, rng=default_rng()):
 
     # set default error as normal
     if err is None: err = lambda *x: rng.normal(0, np.sqrt(x[0]), x[1])
-
 
     # simulate data
     X = np.zeros([n, p])
