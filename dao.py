@@ -241,7 +241,7 @@ def mpii(g, i, rng=default_rng()):
     # update w
     if k > 0:
 
-        q = rng.beta(k / 2, (p - i) / 2)
+        q = rng.beta(k / 2, (p - i + 1) / 2)
         y = rng.standard_normal(k)
         u = y / norm(y)
         w[:k] = np.sqrt(q) * u
