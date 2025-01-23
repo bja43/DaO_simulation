@@ -501,7 +501,7 @@ def cov_to_dag(g, S):
     p = S.shape[0]
 
     B = np.zeros((p, p))
-    O = np.diag(S)
+    O = np.diag(S).copy()
 
     for i in range(p):
         pa = np.where(g[i])[0]
