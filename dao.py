@@ -287,7 +287,7 @@ def corr(g):
     -------
     R = correlation matrix
     B = beta matrix
-    O = error vector
+    O = error vector (variance)
     '''
 
     # reorder g
@@ -343,7 +343,7 @@ def cov(g, lb_b=0, ub_b=1, lb_o=1, ub_o=2, rng=default_rng()):
     -------
     S = covariance matrix
     B = beta matrix
-    O = error vector
+    O = error vector (variance)
     '''
 
     # p = |variables|
@@ -383,7 +383,7 @@ def simulate(B, O, n, err=None, rng=default_rng()):
     Parameters
     ----------
     B = beta matrix
-    O = error vector
+    O = error vector (variance)
     n = sample size
     err = error distribution
     rng = random number generator
@@ -494,7 +494,7 @@ def cov_to_dag(g, S):
     Returns
     -------
     B = beta matrix
-    O = error vector
+    O = error vector (variance)
     '''
 
     # p = |variables|
