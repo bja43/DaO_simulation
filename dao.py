@@ -1,9 +1,8 @@
 import numpy as np
 
 from numpy.random import default_rng
-from numpy.linalg import inv
-from numpy.linalg import norm
-from numpy.linalg import cholesky
+from numpy.linalg import inv, norm, cholesky
+
 from itertools import chain
 
 
@@ -376,7 +375,32 @@ def cov(g, lb_b=0, ub_b=1, lb_o=1, ub_o=2, rng=default_rng()):
     return S, B, O
 
 
-def simulate(B, O, n, err=None, rng=default_rng()):
+def _norm(rng, s2, n):
+
+    return rng.normal(0, np.sqrt(s2), n)
+
+
+def _exp(rng, s2, n):
+
+    return rng.exponential(np.sqrt(s2), n)
+
+
+def _gumb(rng, s2, n):
+
+    return rng.gumbel(0, np.sqrt(6.0) * np.sqrt(s2) / np.pi, n)
+
+
+def _lapl(rng, s2, n):
+
+    return rng.laplace(0, np.sqrt(s2) / np.sqrt(2), n)
+
+
+def _unif(rng, s2, n):
+
+    return rng.uniform(-np.sqrt(3) * np.sqrt(s2), np.sqrt(3) * np.sqrt(s2), n)
+
+
+def simulate(B, O, n, err=_norm, rng=default_rng()):
     '''
     Randomly simulates data with the provided parameters.
 
@@ -401,9 +425,6 @@ def simulate(B, O, n, err=None, rng=default_rng()):
     B = B[ord][:, ord]
     O = O[ord]
 
-    # set default error as normal
-    if err is None: err = lambda *x: rng.normal(0, np.sqrt(x[0]), x[1])
-
     # simulate data
     X = np.zeros([n, p])
     for i in range(p):
@@ -414,7 +435,7 @@ def simulate(B, O, n, err=None, rng=default_rng()):
         for j in J: X[:, i] += B[i, j] * X[:, j]
 
         # add error
-        X[:, i] += err(O[i], n)
+        X[:, i] += err(rng, O[i], n)
 
     # reorder X
     ord = invert_order(ord)
