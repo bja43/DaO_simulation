@@ -375,32 +375,32 @@ def cov(g, lb_b=0, ub_b=1, lb_o=1, ub_o=2, rng=default_rng()):
     return S, B, O
 
 
-def _norm(rng, s2, n):
+def gaus_err(rng, s2, n):
 
     return rng.normal(0, np.sqrt(s2), n)
 
 
-def _exp(rng, s2, n):
+def exp_err(rng, s2, n):
 
     return rng.exponential(np.sqrt(s2), n)
 
 
-def _gumb(rng, s2, n):
+def gumb_err(rng, s2, n):
 
     return rng.gumbel(0, np.sqrt(6.0) * np.sqrt(s2) / np.pi, n)
 
 
-def _lapl(rng, s2, n):
+def lapl_err(rng, s2, n):
 
     return rng.laplace(0, np.sqrt(s2) / np.sqrt(2), n)
 
 
-def _unif(rng, s2, n):
+def unif_err(rng, s2, n):
 
     return rng.uniform(-np.sqrt(3) * np.sqrt(s2), np.sqrt(3) * np.sqrt(s2), n)
 
 
-def simulate(B, O, n, err=_norm, rng=default_rng()):
+def simulate(B, O, n, err=gaus_err, rng=default_rng()):
     '''
     Randomly simulates data with the provided parameters.
 
