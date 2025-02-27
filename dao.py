@@ -273,7 +273,7 @@ def pmat(g, i):
     return P
 
 
-def corr(g):
+def corr(g, rng=default_rng()):
     '''
     Randomly generates a correlation matrix where f(R) ~ 1 given a direct
     acyclic graph.
@@ -281,6 +281,7 @@ def corr(g):
     Parameters
     ----------
     g = directed acyclic graph
+    rng = random number generator
 
     Returns
     -------
@@ -305,7 +306,7 @@ def corr(g):
     for i in range(m, p):
         P = pmat(g, i)
         L = cholesky(P.T @ R[:i, :i] @ P)
-        w = mpii(g, i)
+        w = mpii(g, i, rng)
 
         r = P @ L @ w
         b = P @ inv(L).T @ w
