@@ -3,7 +3,7 @@
 The DAG adaptation of the Onion method
 
 
-## Exmaple Usage
+## Example Usage
 
 ```python
 import pandas as pd
