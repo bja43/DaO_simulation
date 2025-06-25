@@ -61,8 +61,8 @@ def sf_out(g, rng=default_rng()):
     # reorder g if not lower triangular
     nlt = any([g[i, j] for j in range(p) for i in range(j)])
     if nlt:
-        ord = sofic_order(g)
-        g = g[ord][:, ord]
+        order = sofic_order(g)
+        g = g[order][:, order]
     else:
         g = g.copy()
 
@@ -83,8 +83,8 @@ def sf_out(g, rng=default_rng()):
 
     # reorder g if not lower triangular
     if nlt:
-        ord = invert_order(ord)
-        g = g[ord][:, ord]
+        order = invert_order(order)
+        g = g[order][:, order]
 
     return g
 
@@ -109,8 +109,8 @@ def sf_in(g, rng=default_rng()):
     # reorder g if not lower triangular
     nlt = any([g[i, j] for j in range(p) for i in range(j)])
     if nlt:
-        ord = sofic_order(g)
-        g = g[ord][:, ord]
+        order = sofic_order(g)
+        g = g[order][:, order]
     else:
         g = g.copy()
 
@@ -131,8 +131,8 @@ def sf_in(g, rng=default_rng()):
 
     # reorder g if not lower triangular
     if nlt:
-        ord = invert_order(ord)
-        g = g[ord][:, ord]
+        order = invert_order(order)
+        g = g[order][:, order]
 
     return g
 
@@ -168,7 +168,7 @@ def sofic_order(g):
 
     Returns:
     --------
-    ord = order
+    order = source first consistent order
     '''
 
     # p = |variables|
@@ -177,40 +177,42 @@ def sofic_order(g):
     # convert g to booleans
     g = g.astype(bool)
 
-    ord = [i for i in range(p) if np.sum(g[i]) == 0]
+    order = [i for i in range(p) if np.sum(g[i]) == 0]
+    unordered = [i for i in range(p) if i not in order]
 
-    while len(ord) < p:
-        for i in range(p):
-            if i in ord: continue
-            if np.sum(g[i]) == np.sum(g[i][ord]):
-                ord.append(i)
+    while unordered:
+        for i in unordered:
+            if np.sum(g[i]) == np.sum(g[i][order]):
+                order.append(i)
+                unordered.remove(i)
                 break
-            if i == p - 1:
+
+            if i == len(unordered) - 1:
                 raise ValueError("cycle detected")
 
-    return ord
+    return order
 
 
-def invert_order(ord):
+def invert_order(order):
     '''
     Helper function: inverts the order.
 
     Parameters
     -----------
-    ord = order
+    order = inverted order
 
     Returns:
     --------
-    inv_ord = inverse order
+    inv_order = inverse order
     '''
 
     # p = |variables|
-    p = len(ord)
+    p = len(order)
 
-    inv_ord = [0 for i in range(p)]
-    for i in range(p): inv_ord[ord[i]] = i
+    inv_order = [0 for i in range(p)]
+    for i in range(p): inv_order[order[i]] = i
 
-    return inv_ord
+    return inv_order
 
 
 def mpii(g, i, rng=default_rng()):
@@ -291,8 +293,8 @@ def corr(g, rng=default_rng()):
     '''
 
     # reorder g
-    ord = sofic_order(g)
-    g = g[ord][:, ord]
+    order = sofic_order(g)
+    g = g[order][:, order]
 
     # p = |variables|; m = |source variables|
     p = g.shape[0]
@@ -318,15 +320,15 @@ def corr(g, rng=default_rng()):
         O[i] = o
 
     # reorder R, B, and O
-    ord = invert_order(ord)
-    R = R[ord][:, ord]
-    B = B[ord][:, ord]
-    O = O[ord]
+    order = invert_order(order)
+    R = R[order][:, order]
+    B = B[order][:, order]
+    O = O[order]
 
     return R, B, O
 
 
-def cov(g, lb_b=0, ub_b=1, lb_o=1, ub_o=2, rng=default_rng()):
+def cov(g, lb_b=0, ub_b=1, lb_o=1, ub_o=2, dag_only=False, rng=default_rng()):
     '''
     Randomly generates a covariance matrix given a directed acyclic graph.
 
@@ -337,6 +339,7 @@ def cov(g, lb_b=0, ub_b=1, lb_o=1, ub_o=2, rng=default_rng()):
     ub_b = upper bound for beta
     lb_o = lower bound for omega
     ub_o = upper bound for omega
+    dag_only = only compute and return directed acyclic graph parameters
     rng = random number generator
 
     Returns
@@ -350,8 +353,8 @@ def cov(g, lb_b=0, ub_b=1, lb_o=1, ub_o=2, rng=default_rng()):
     p = g.shape[0]
 
     # reorder g
-    ord = sofic_order(g)
-    g = g[ord][:, ord]
+    order = sofic_order(g)
+    g = g[order][:, order]
 
     # e = |edges|
     e = np.sum(g)
@@ -364,16 +367,18 @@ def cov(g, lb_b=0, ub_b=1, lb_o=1, ub_o=2, rng=default_rng()):
     O = rng.uniform(lb_o, ub_o, p)
 
     # calculate covariance
-    IB = inv(np.eye(p) - B)
-    S = IB @ np.diag(O) @ IB.T
+    if not dag_only:
+        IB = inv(np.eye(p) - B)
+        S = IB @ np.diag(O) @ IB.T
 
     # reorder S, B, and O
-    ord = invert_order(ord)
-    S = S[ord][:, ord]
-    B = B[ord][:, ord]
-    O = O[ord]
+    order = invert_order(order)
+    if not dag_only: S = S[order][:, order]
+    B = B[order][:, order]
+    O = O[order]
 
-    return S, B, O
+    if dag_only: return B, O
+    else: return S, B, O
 
 
 def gaus_err(rng, s2, n):
@@ -422,9 +427,9 @@ def simulate(B, O, n, err=gaus_err, rng=default_rng()):
     p = B.shape[0]
 
     # reorder B and O
-    ord = sofic_order(B)
-    B = B[ord][:, ord]
-    O = O[ord]
+    order = sofic_order(B)
+    B = B[order][:, order]
+    O = O[order]
 
     # simulate data
     X = np.zeros([n, p])
@@ -439,8 +444,8 @@ def simulate(B, O, n, err=gaus_err, rng=default_rng()):
         X[:, i] += err(rng, O[i], n)
 
     # reorder X
-    ord = invert_order(ord)
-    X = X[:, ord]
+    order = invert_order(order)
+    X = X[:, order]
 
     return X
 
