@@ -181,14 +181,16 @@ def sofic_order(g):
     unordered = [i for i in range(p) if i not in order]
 
     while unordered:
+        found = False
         for i in unordered:
             if np.sum(g[i]) == np.sum(g[i][order]):
                 order.append(i)
                 unordered.remove(i)
+                found = True 
                 break
 
-            if i == len(unordered) - 1:
-                raise ValueError("cycle detected")
+        if not found:
+            raise ValueError("cycle detected")
 
     return order
 
