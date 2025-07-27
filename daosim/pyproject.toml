@@ -1,6 +1,6 @@
 [project]
 name = "daosim"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
   { name = "Bryan Andrews", email = "andr1017@umn.edu" },
 ]
