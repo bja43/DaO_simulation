@@ -236,7 +236,7 @@ def mpii(g, i, rng=default_rng()):
     p = g.shape[0]
 
     # k = |parents|
-    k = np.sum(g[i])
+    k = np.sum(g[i], dtype=int)
 
     # initialize w
     w = np.zeros(i)
@@ -543,3 +543,25 @@ def cov_to_dag(g, S):
             O[i] -= yX @ IXX @ yX
 
     return B, O
+
+
+def dag_to_cov(B, O):
+    '''
+    Converts directed acyclic graph parameters to covariance.
+
+    Parameters
+    ----------
+    B = beta matrix
+    O = error vector (variance)
+
+    Returns
+    -------
+    S = covariance matrix
+    '''
+
+    # p = |variables|
+    p = B.shape[0]
+
+    IB = inv(np.eye(p) - B)
+
+    return IB @ np.diag(O) @ IB.T
