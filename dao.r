@@ -248,7 +248,7 @@ corr <- function(g) {
     R[1 : i, i + 1] <- r
     R[i + 1, 1 : i] <- r
     B[i + 1, 1 : i] <- b
-    O[i] <- o
+    O[i + 1] <- o
   }
   
   # reorder R, B, and O
